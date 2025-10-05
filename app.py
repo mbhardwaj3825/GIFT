@@ -51,14 +51,14 @@ if not st.session_state.auth:
     st.markdown("<h1 style='text-align:center; margin-top:60px;'>A little world — just for you 🫀</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align:center; margin-bottom:24px;'>Enter the secret passcode to unlock our private space</h4>", unsafe_allow_html=True)
     st.session_state.passcode_input = st.text_input("Passcode", type="password")
+    
     if st.button("Unlock 💙"):
         if st.session_state.passcode_input == PASSCODE:
             st.session_state.auth = True
-            st.experimental_rerun = lambda: None  # dummy to avoid error
-            st.success("Unlocked! Explore the app now 💙")
+            st.experimental_rerun()  # ✅ Safe inside button click
         else:
             st.error("Wrong passcode 💫")
-    st.stop()  # stop rendering rest of app if not authenticated
+    st.stop()  # stop rendering the rest of the app until correct
 
 # ---------- NAVIGATION ----------
 st.sidebar.title("💫 Navigate")
