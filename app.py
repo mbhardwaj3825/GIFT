@@ -27,45 +27,38 @@ def ensure_json(filename, default):
         with open(p, "w", encoding="utf-8") as f:
             json.dump(default, f, ensure_ascii=False, indent=2)
 
-# Only create empty files for content we will fill later
 ensure_json("notes.json", [])
 ensure_json("songs.json", [])
 ensure_json("timeline.json", [])
 
 # ---------- CSS ----------
-st.markdown(
-    """
-    <style>
-    .stApp { background: linear-gradient(180deg,#04133a 0%, #082a5f 45%, #0d3b7a 100%); color:#eaf4ff; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial; }
-    .card { background: rgba(255,255,255,0.03); border-radius:12px; padding:18px; margin-bottom:12px; box-shadow:0 6px 30px rgba(2,10,40,0.4); border:1px solid rgba(255,255,255,0.04);}
-    h1,h2,h3 { color:#e9f6ff; }
-    .polaroid { background:#fff; padding:12px 12px 20px 12px; display:inline-block; margin:10px; border-radius:8px; box-shadow:0 8px 30px rgba(2,8,30,0.45); transform:rotate(-1deg);}
-    .polaroid img { width:220px; height:160px; object-fit:cover; border-radius:6px; display:block; margin-bottom:8px;}
-    .polaroid .caption { color:#0e2340; font-weight:600; font-size:14px; text-align:center; }
-    .stButton>button { background: linear-gradient(90deg,#66aaff,#3b7df0); color:white; border:none; padding:10px 14px; border-radius:10px; font-weight:600;}
-    .small-muted { color:#cfe9ff; font-size:13px; opacity:0.9; }
-    .section { padding:14px; margin-bottom:14px; border-radius:10px; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
+st.markdown("""
+<style>
+.stApp { background: linear-gradient(180deg,#04133a 0%, #082a5f 45%, #0d3b7a 100%); color:#eaf4ff; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial; }
+.card { background: rgba(255,255,255,0.03); border-radius:12px; padding:18px; margin-bottom:12px; box-shadow:0 6px 30px rgba(2,10,40,0.4); border:1px solid rgba(255,255,255,0.04);}
+h1,h2,h3 { color:#e9f6ff; }
+.polaroid { background:#fff; padding:12px 12px 20px 12px; display:inline-block; margin:10px; border-radius:8px; box-shadow:0 8px 30px rgba(2,8,30,0.45); transform:rotate(-1deg);}
+.polaroid img { width:220px; height:160px; object-fit:cover; border-radius:6px; display:block; margin-bottom:8px;}
+.polaroid .caption { color:#0e2340; font-weight:600; font-size:14px; text-align:center; }
+.stButton>button { background: linear-gradient(90deg,#66aaff,#3b7df0); color:white; border:none; padding:10px 14px; border-radius:10px; font-weight:600;}
+.small-muted { color:#cfe9ff; font-size:13px; opacity:0.9; }
+.section { padding:14px; margin-bottom:14px; border-radius:10px; }
+</style>
+""", unsafe_allow_html=True)
 
 # ---------- PASSCODE PAGE ----------
-def passcode_page():
+if not st.session_state.auth:
     st.markdown("<h1 style='text-align:center; margin-top:60px;'>A little world — just for you 🫀</h1>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align:center; margin-bottom:24px;'>Enter the secret passcode to unlock our private space</h4>", unsafe_allow_html=True)
     st.session_state.passcode_input = st.text_input("Passcode", type="password")
     if st.button("Unlock 💙"):
         if st.session_state.passcode_input == PASSCODE:
             st.session_state.auth = True
-            st.experimental_rerun()
+            st.experimental_rerun = lambda: None  # dummy to avoid error
+            st.success("Unlocked! Explore the app now 💙")
         else:
             st.error("Wrong passcode 💫")
-
-# ---------- MAIN APP ----------
-if not st.session_state.auth:
-    passcode_page()
-    st.stop()
+    st.stop()  # stop rendering rest of app if not authenticated
 
 # ---------- NAVIGATION ----------
 st.sidebar.title("💫 Navigate")
@@ -143,7 +136,6 @@ elif page == "Spin the Wheel 💕":
 elif page == "Reasons I Love You 💌":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Reasons I Love You 💌")
-    # Your 54 Reasons directly added
     reasons = [
         "I love your personality","I love your smile","I love your hairs","I love your smell","I love your jollyness",
         "I love your maturity","I love your childishness","I love the way you balance","I love your futuristic vision",
