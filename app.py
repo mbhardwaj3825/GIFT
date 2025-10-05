@@ -31,7 +31,7 @@ ensure_json("notes.json", [])
 ensure_json("songs.json", [])
 ensure_json("timeline.json", [])
 
-# ---------- CSS ----------
+# ---------- CSS & FLOATING HEARTS ----------
 st.markdown("""
 <style>
 .stApp { background: linear-gradient(180deg,#04133a 0%, #082a5f 45%, #0d3b7a 100%); color:#eaf4ff; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial; overflow-x:hidden;}
@@ -44,31 +44,34 @@ h1,h2,h3 { color:#e9f6ff; }
 .small-muted { color:#cfe9ff; font-size:13px; opacity:0.9; }
 .section { padding:14px; margin-bottom:14px; border-radius:10px; }
 
+/* Floating hearts animation */
 @keyframes floatUp {
-    0% {transform: translateY(0) rotate(0deg); opacity:1;}
-    100% {transform: translateY(-800px) rotate(360deg); opacity:0;}
+    0% {transform: translateY(0) scale(1); opacity:1;}
+    100% {transform: translateY(-800px) scale(1.5); opacity:0;}
 }
 .floating-heart {
-    position: fixed; width: 20px; height: 20px; background: #66aaff; clip-path: polygon(50% 0%, 61% 12%, 75% 12%, 88% 25%, 88% 38%, 75% 50%, 50% 80%, 25% 50%, 12% 38%, 12% 25%, 25% 12%, 39% 12%);
-    animation: floatUp linear infinite; z-index:9999;
+    position: fixed;
+    width: 20px; height: 20px;
+    background-color: #66aaff;
+    clip-path: polygon(50% 0%, 61% 12%, 75% 12%, 88% 25%, 88% 38%, 75% 50%, 50% 80%, 25% 50%, 12% 38%, 12% 25%, 25% 12%, 39% 12%);
+    animation: floatUp linear infinite;
+    z-index: 9999;
+    pointer-events:none;
+    border-radius: 5px;
 }
 </style>
-""", unsafe_allow_html=True)
-
-# ---------- FLOATING HEARTS SCRIPT ----------
-st.markdown("""
 <script>
 function createHeart(){
-    let heart = document.createElement("div");
+    var heart = document.createElement("div");
     heart.className = "floating-heart";
     heart.style.left = Math.random() * window.innerWidth + "px";
-    heart.style.animationDuration = 4 + Math.random() * 4 + "s";
-    heart.style.width = 15 + Math.random()*15 + "px";
+    heart.style.width = 10 + Math.random()*15 + "px";
     heart.style.height = heart.style.width;
+    heart.style.animationDuration = 3 + Math.random()*3 + "s";
     document.body.appendChild(heart);
-    setTimeout(()=>{heart.remove()}, 8000);
+    setTimeout(function(){heart.remove();}, 6000);
 }
-setInterval(createHeart, 500);
+setInterval(createHeart, 300);
 </script>
 """, unsafe_allow_html=True)
 
@@ -81,7 +84,7 @@ if not st.session_state.auth:
     if st.button("Unlock 💙"):
         if st.session_state.passcode_input == PASSCODE:
             st.session_state.auth = True
-            st.experimental_rerun()  # ✅ safe inside button click
+            st.experimental_rerun()  # Safe inside button click
         else:
             st.error("Wrong passcode 💫")
     st.stop()  # stop rendering the rest of the app until correct
