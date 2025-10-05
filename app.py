@@ -1,7 +1,7 @@
 # app.py
 import streamlit as st
-import json, os, random
-from datetime import datetime, date
+import json, random
+from datetime import datetime
 from pathlib import Path
 
 # ---------- BASIC CONFIG ----------
@@ -9,57 +9,11 @@ st.set_page_config(page_title="For My Anjuuu 💙", page_icon="🫀", layout="wi
 
 PASSCODE = "Iloveyouladuu"
 
-# ---------- AUTH ----------
+# ---------- SESSION STATE ----------
 if "auth" not in st.session_state:
     st.session_state.auth = False
-
-if not st.session_state.auth:
-    # Entry screen
-    st.markdown(
-        """
-        <style>
-        .title { font-size:42px; font-weight:600; color:#e6f0ff; text-shadow: 0 2px 8px rgba(0,0,0,0.25); text-align:center; margin-top:60px; }
-        .subtitle { font-size:18px; color:#d6eaff; text-align:center; margin-bottom: 24px; }
-        input { background: rgba(255,255,255,0.06); border-radius: 10px; padding:10px; color: #e6f7ff; }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown("<div class='title'>A little world — just for you 🫀</div>", unsafe_allow_html=True)
-    st.markdown("<div class='subtitle'>Enter the secret passcode to unlock our private space</div>", unsafe_allow_html=True)
-
-    # Floating hearts CSS/HTML
-    st.markdown(
-        """
-        <style>
-        .heart { position: fixed; width: 28px; height: 28px; background: radial-gradient(circle at 30% 30%, #a8d1ff 0%, #5aa0ff 40%, #2b7be6 100%); transform: rotate(-45deg); border-radius:6px; box-shadow: 0 6px 18px rgba(43,123,230,0.25); }
-        .heart:before, .heart:after { content: ""; position: absolute; width: 28px; height: 28px; background: radial-gradient(circle at 30% 30%, #a8d1ff 0%, #5aa0ff 40%, #2b7be6 100%); border-radius: 50%; }
-        .heart:before { top:-14px; left:0; } .heart:after { left:14px; top:0; }
-        @keyframes floaty { 0% { transform: translateY(0) rotate(-10deg); opacity:0.8; } 50% { transform: translateY(-20px) rotate(10deg); opacity:1; } 100% { transform: translateY(0) rotate(-10deg); opacity:0.8; } }
-        .h1 { animation: floaty 5s ease-in-out infinite; left:10%; top:10%; }
-        .h2 { animation: floaty 6s ease-in-out infinite; left:80%; top:30%; width:22px; height:22px; }
-        .h3 { animation: floaty 7s ease-in-out infinite; left:50%; top:5%; width:20px; height:20px; }
-        .anat { position: fixed; right:6%; top:18%; width:46px; height:46px; opacity:0.95; transform: rotate(0deg); animation: floaty 7s ease-in-out infinite; }
-        </style>
-        <div class="heart h1"></div>
-        <div class="heart h2"></div>
-        <div class="heart h3"></div>
-        <svg class="anat" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#7fb7ff" d="M256 464s-216-136-216-248c0-85 65-136 128-136 43 0 88 33 88 33s45-33 88-33c63 0 128 51 128 136 0 112-216 248-216 248z"/>
-        </svg>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    code = st.text_input("Passcode", type="password")
-    if st.button("Unlock 💙"):
-        if code == PASSCODE:
-            st.session_state.auth = True
-            st.experimental_rerun()
-        else:
-            st.error("Wrong passcode 💫")
-    st.stop()
+if "passcode_input" not in st.session_state:
+    st.session_state.passcode_input = ""
 
 # ---------- DATA & FOLDERS ----------
 DATA_DIR = Path("data")
@@ -73,18 +27,10 @@ def ensure_json(filename, default):
         with open(p, "w", encoding="utf-8") as f:
             json.dump(default, f, ensure_ascii=False, indent=2)
 
+# Only create empty files for content we will fill later
 ensure_json("notes.json", [])
 ensure_json("songs.json", [])
-ensure_json("reasons.json", [])
 ensure_json("timeline.json", [])
-
-def load_json(name):
-    with open(DATA_DIR / name, "r", encoding="utf-8") as f:
-        return json.load(f)
-
-def save_json(name, data):
-    with open(DATA_DIR / name, "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=2)
 
 # ---------- CSS ----------
 st.markdown(
@@ -103,6 +49,23 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+# ---------- PASSCODE PAGE ----------
+def passcode_page():
+    st.markdown("<h1 style='text-align:center; margin-top:60px;'>A little world — just for you 🫀</h1>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center; margin-bottom:24px;'>Enter the secret passcode to unlock our private space</h4>", unsafe_allow_html=True)
+    st.session_state.passcode_input = st.text_input("Passcode", type="password")
+    if st.button("Unlock 💙"):
+        if st.session_state.passcode_input == PASSCODE:
+            st.session_state.auth = True
+            st.experimental_rerun()
+        else:
+            st.error("Wrong passcode 💫")
+
+# ---------- MAIN APP ----------
+if not st.session_state.auth:
+    passcode_page()
+    st.stop()
 
 # ---------- NAVIGATION ----------
 st.sidebar.title("💫 Navigate")
@@ -132,7 +95,8 @@ elif page == "Today's Thought 💭":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("💭 Today's Thought")
     st.write("Leave a note or read old thoughts. It's like a secret diary.")
-    notes = load_json("notes.json")
+    notes_file = DATA_DIR / "notes.json"
+    notes = json.loads(notes_file.read_text()) if notes_file.exists() else []
     with st.form("note_form"):
         author = st.selectbox("Who is writing?", ["Him", "Me"])
         text = st.text_area("Write your thought...", height=140)
@@ -141,7 +105,7 @@ elif page == "Today's Thought 💭":
         if submitted and text.strip():
             entry = {"author": author, "text": text.strip(), "date": datetime.now().isoformat(), "lock": bool(protect.strip()), "mask": protect.strip() if protect.strip() else ""}
             notes.append(entry)
-            save_json("notes.json", notes)
+            notes_file.write_text(json.dumps(notes, ensure_ascii=False, indent=2))
             st.success("Saved 💙")
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -161,13 +125,7 @@ elif page == "Click if you miss me 💞":
 elif page == "Our Songs 🎶":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Our Songs 🎶")
-    songs = load_json("songs.json")
-    if songs:
-        for s in songs:
-            st.markdown(f"**{s.get('title','Untitled')}** — <span class='small-muted'>{s.get('note','')}</span>", unsafe_allow_html=True)
-            if s.get("link"): st.markdown(f"[Listen here]({s.get('link')})")
-            st.markdown("---")
-    else: st.info("No songs added yet.")
+    st.write("No songs added yet. Add them later in Settings.")
     st.markdown("</div>", unsafe_allow_html=True)
 
 # Spin the Wheel
@@ -185,8 +143,23 @@ elif page == "Spin the Wheel 💕":
 elif page == "Reasons I Love You 💌":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Reasons I Love You 💌")
-    reasons = load_json("reasons.json")
-    if not reasons: st.info("No reasons yet.")
+    # Your 54 Reasons directly added
+    reasons = [
+        "I love your personality","I love your smile","I love your hairs","I love your smell","I love your jollyness",
+        "I love your maturity","I love your childishness","I love the way you balance","I love your futuristic vision",
+        "I love the way I am happy around you","I love the way I am safe around you","I love that you communicate",
+        "I love that you try to solve","I love that you are emotionally available","I love your humour","I love your eyes",
+        "I love the way you listen","I love that you remember details","I love the sense of security you give",
+        "I love your confidence","I love your nature","I love the small gestures","I love your intelligence",
+        "I love your positive approach towards life","I love your dressing sense","I love that you never think of giving up",
+        "I love how you respect others","I love your humanity","I love how you understand","I love that for you family matters",
+        "I love that you think of 'your' people so selflessly","I love that you cry","I love your anger","I love your dance",
+        "I love your general knowledge","I love that you love","I love that you believe in God","I love that you learn",
+        "I love how you manage","I love that you are foodie","I love your courage","I love your boundaries","I love your control",
+        "I love your thoughtfulness","I love how you complete me","I love the way you say 'meri laduuu'","I love the way you teach me",
+        "I love the priority you give","I love the support you give","I love how you make me laugh","I love the way you love me",
+        "I love our friendship","Most importantly I love youu"
+    ]
     for i, r in enumerate(reasons, start=1):
         with st.expander(f"Reason {i} ❤️"): st.write(r)
     st.markdown("</div>", unsafe_allow_html=True)
