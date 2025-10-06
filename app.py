@@ -348,7 +348,7 @@ elif page == "Photos & Polaroids 📸":
         for i, fpath in enumerate(files):
             with cols[i % 3]:
                 try:
-                    st.image(str(fpath), use_column_width=True)
+                    st.image(str(fpath), use_container_width=True)
                     # find caption if exists in timeline.json
                     tl = read_json("timeline.json")
                     cap = next((t.get("caption","") for t in tl if t.get("file") == str(fpath)), "")
