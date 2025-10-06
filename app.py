@@ -322,6 +322,7 @@ reasons = [
 
 for i, r in enumerate(reasons, 1):
     st.markdown(f"**{i}. {r}**")
+    
 st.markdown("</div>", unsafe_allow_html=True)
 
 
