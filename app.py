@@ -5,19 +5,44 @@ import time
 # -------------------- PAGE CONFIG --------------------
 st.set_page_config(page_title="For My Anjuuu 💙", layout="centered")
 
-# -------------------- STYLES --------------------
+# -------------------- CUSTOM STYLES --------------------
 st.markdown("""
 <style>
 body {
-    background: radial-gradient(circle at top left, #a1c4fd, #c2e9fb);
+    background: linear-gradient(135deg, #b3e5fc, #e1bee7, #bbdefb);
+    background-attachment: fixed;
+    background-size: cover;
     font-family: 'Poppins', sans-serif;
     color: #1e3a8a;
     overflow-x: hidden;
+    position: relative;
 }
+
+/* faint animated hearts overlay */
+body::before {
+    content: "";
+    background-image: url('https://i.imgur.com/Z1r5NnH.png');
+    opacity: 0.15;
+    background-repeat: repeat;
+    background-size: 100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+    animation: floatBg 20s linear infinite;
+}
+@keyframes floatBg {
+    from {background-position: 0 0;}
+    to {background-position: 0 200px;}
+}
+
 h1, h2, h3, h4 {
     text-align: center;
-    color: #1e3a8a;
+    color: #0f2167;
 }
+
 .card {
     background: rgba(255, 255, 255, 0.7);
     padding: 1.5rem;
@@ -25,8 +50,9 @@ h1, h2, h3, h4 {
     margin: 1rem 0;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
+
 .stButton>button {
-    background-color: #60a5fa;
+    background-color: #5fa8f7;
     color: white;
     border: none;
     border-radius: 25px;
@@ -38,20 +64,8 @@ h1, h2, h3, h4 {
     background-color: #2563eb;
     transform: scale(1.05);
 }
-.love-bg {
-    background-image: url('https://i.imgur.com/EWvFfFZ.png');
-    background-size: 80px;
-    background-repeat: repeat;
-    opacity: 0.08;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-}
 
-/* Wheel styles */
+/* wheel */
 .wheel-container {
     display: flex;
     flex-direction: column;
@@ -65,6 +79,7 @@ h1, h2, h3, h4 {
     position: relative;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(37,99,235,0.4);
+    transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 .segment {
     position: absolute;
@@ -86,12 +101,7 @@ h1, h2, h3, h4 {
     position: relative;
     top: -10px;
 }
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(1800deg); }
-}
 </style>
-<div class='love-bg'></div>
 """, unsafe_allow_html=True)
 
 # -------------------- LOGIN --------------------
@@ -172,7 +182,7 @@ def main_app():
             result = random.choice(prizes)
             st.markdown("""
             <style>
-            #wheel { animation: spin 4s ease-out; }
+            #wheel { transform: rotate(1440deg); }
             </style>
             """, unsafe_allow_html=True)
             time.sleep(4)
