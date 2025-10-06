@@ -9,7 +9,7 @@ import os
 
 # ---------- CONFIG ----------
 st.set_page_config(page_title="For My Anjuuu 💙", layout="wide")
-PASSCODE = "Iloveyouladuu"
+PASSCODE = "Iloveyoucookie"
 
 # ---------- DATA FOLDERS ----------
 ROOT = Path(".")
@@ -225,7 +225,7 @@ elif page == "Spin the Wheel 💕":
         "A forehead kiss 💋",
         "One long cuddle session 💞",
         "One truth you can't lie",
-        "You get a surprise gift 🎁"
+        "You get a surprise gift 🎁",
         "One dare you can't deny"
     ]
 
