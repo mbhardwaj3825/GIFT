@@ -299,31 +299,32 @@ elif page == "Spin the Wheel 💕":
     st.markdown("</div>", unsafe_allow_html=True)
 
 # Reasons page (all visible)
-elif page == "Reasons I Love You 💌":
+elif page == "50+ Reasons I Love You 💌":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Reasons I Love You 💌")
-reasons = [
-    "I love your personality", "I love your smile", "I love your hairs", "I love your smell",
-    "I love your jollyness", "I love your maturity", "I love your childishness",
-    "I love the way you balance", "I love your futuristic vision", "I love the way I am happy around you",
-    "I love the way I am safe around you", "I love that you communicate", "I love that you try to solve",
-    "I love that you are emotionally available", "I love your humour", "I love your eyes",
-    "I love the way you listen", "I love that you remember details", "I love the sense of security you give",
-    "I love your confidence", "I love your nature", "I love the small gestures", "I love your intelligence",
-    "I love your positive approach towards life", "I love your dressing sense", "I love that you never think of giving up",
-    "I love how you respect others", "I love your humanity", "I love how you understand", "I love that family matters",
-    "I love that you think of 'your' people so selflessly", "I love that you cry", "I love your anger", "I love your dance",
-    "I love your general knowledge", "I love that you love", "I love that you believe in God", "I love that you learn",
-    "I love how you manage", "I love that you are foodie", "I love your courage", "I love your boundaries", "I love your control",
-    "I love your thoughtfulness", "I love how you complete me", "I love the way you say 'meri laduuu'", "I love the way you teach me",
-    "I love the priority you give", "I love the support you give", "I love how you make me laugh", "I love the way you love me",
-    "I love our friendship", "And most importantly, I love you 💙"
-]
-
-for i, r in enumerate(reasons, 1):
-    st.markdown(f"**{i}. {r}**")
     
-st.markdown("</div>", unsafe_allow_html=True)
+    reasons = [
+        "I love your personality", "I love your smile", "I love your hairs", "I love your smell",
+        "I love your jollyness", "I love your maturity", "I love your childishness",
+        "I love the way you balance", "I love your futuristic vision", "I love the way I am happy around you",
+        "I love the way I am safe around you", "I love that you communicate", "I love that you try to solve",
+        "I love that you are emotionally available", "I love your humour", "I love your eyes",
+        "I love the way you listen", "I love that you remember details", "I love the sense of security you give",
+        "I love your confidence", "I love your nature", "I love the small gestures", "I love your intelligence",
+        "I love your positive approach towards life", "I love your dressing sense", "I love that you never think of giving up",
+        "I love how you respect others", "I love your humanity", "I love how you understand", "I love that family matters",
+        "I love that you think of 'your' people so selflessly", "I love that you cry", "I love your anger", "I love your dance",
+        "I love your general knowledge", "I love that you love", "I love that you believe in God", "I love that you learn",
+        "I love how you manage", "I love that you are foodie", "I love your courage", "I love your boundaries", "I love your control",
+        "I love your thoughtfulness", "I love how you complete me", "I love the way you say 'meri laduuu'", "I love the way you teach me",
+        "I love the priority you give", "I love the support you give", "I love how you make me laugh", "I love the way you love me",
+        "I love our friendship", "And most importantly, I love you 💙"
+    ]
+    
+    for i, r in enumerate(reasons, 1):
+        st.markdown(f"**{i}. {r}**")
+    
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # Photos & Polaroids
