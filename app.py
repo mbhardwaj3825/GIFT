@@ -139,7 +139,7 @@ page = st.sidebar.radio("", [
     "Click if you miss me 💞",
     "Our Songs 🎶",
     "Spin the Wheel 💕",
-    "Reasons I Love You 💌",
+    "50+ Reasons I Love You 💌",
     "Photos & Polaroids 📸",
     "Our Story Timeline 🕰️",
     "Settings ⚙️"
@@ -219,13 +219,14 @@ elif page == "Spin the Wheel 💕":
     st.header("Spin the Wheel of Love 🎡")
     options = [
         "You get a tight hug 🤗",
-        "Movie night 🍿",
+        "Let's watch a Movie🍿",
         "You owe me ice cream 🍦",
         "You pick dessert 🍰",
         "A forehead kiss 💋",
         "One long cuddle session 💞",
-        "I’ll cook your favorite meal 🍛",
+        "One truth you can't lie",
         "You get a surprise gift 🎁"
+        "One dare you can't deny"
     ]
 
     n = len(options)
