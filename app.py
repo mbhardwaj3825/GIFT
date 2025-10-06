@@ -190,4 +190,3 @@ if not st.session_state.authenticated:
     passcode_page()
 else:
     main_app()
-
