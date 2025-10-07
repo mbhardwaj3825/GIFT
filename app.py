@@ -1,9 +1,11 @@
 # app.py
 import streamlit as st
-import json, random, time, os, gspread
-from pathlib import Path
+import json
+import random
+import time
 from datetime import datetime
-from google.oauth2.service_account import Credentials
+from pathlib import Path
+import os
 
 # ---------- CONFIG ----------
 st.set_page_config(page_title="For My Anjuuu 💙", layout="wide")
@@ -16,41 +18,14 @@ PHOTOS_DIR = DATA_DIR / "photos"
 DATA_DIR.mkdir(exist_ok=True)
 PHOTOS_DIR.mkdir(parents=True, exist_ok=True)
 
-# ---------- GOOGLE SHEETS SETUP ----------
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-CREDS_PATH = "gs_credentials.json"
-SHEET_ID = "YOUR_GOOGLE_SHEET_ID_HERE"
-
-def gs_client():
-    creds = Credentials.from_service_account_file(CREDS_PATH, scopes=SCOPES)
-    return gspread.authorize(creds)
-
-def read_sheet(tab):
-    try:
-        client = gs_client()
-        sh = client.open_by_key(SHEET_ID)
-        ws = sh.worksheet(tab)
-        return ws.get_all_records()
-    except Exception:
-        return []
-
-def write_sheet(tab, data, headers):
-    try:
-        client = gs_client()
-        sh = client.open_by_key(SHEET_ID)
-        ws = sh.worksheet(tab)
-        ws.clear()
-        ws.append_row(headers)
-        for row in data:
-            ws.append_row([row.get(h, "") for h in headers])
-    except Exception:
-        st.warning(f"Failed to sync {tab} with Google Sheets.")
-
-# ---------- JSON backup functions ----------
 def ensure_json(name, default):
     path = DATA_DIR / name
     if not path.exists() or path.stat().st_size == 0:
         path.write_text(json.dumps(default, ensure_ascii=False, indent=2))
+
+ensure_json("notes.json", [])
+ensure_json("songs.json", [])
+ensure_json("timeline.json", [])
 
 def read_json(name):
     p = DATA_DIR / name
@@ -62,10 +37,44 @@ def read_json(name):
 def write_json(name, data):
     (DATA_DIR / name).write_text(json.dumps(data, ensure_ascii=False, indent=2))
 
-# Ensure files exist
-ensure_json("notes.json", [])
-ensure_json("songs.json", [])
-ensure_json("timeline.json", [])
+# ---------- CSS / ROMANTIC BACKGROUND ----------
+st.markdown(
+    """
+    <style>
+    :root {
+      --accent1: #66aaff;
+      --accent2: #3b7df0;
+      --card-bg: rgba(255,255,255,0.78);
+      --text: #0b2b57;
+    }
+    html, body, .stApp, .main { height: 100%; }
+    .stApp {
+      background: linear-gradient(135deg, #b3e5fc 0%, #d6c8f8 45%, #bfe0ff 100%);
+      background-attachment: fixed;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      background-image: url('https://i.imgur.com/Z1r5NnH.png');
+      background-repeat: repeat;
+      background-size: 100px;
+      opacity: 0.12;
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      animation: floatBg 18s linear infinite;
+    }
+    @keyframes floatBg { from {background-position: 0 0;} to {background-position: 0 200px;} }
+    .card { background: var(--card-bg); padding: 18px; border-radius: 14px; margin-bottom: 14px; box-shadow: 0 8px 30px rgba(10,20,50,0.08); border: 1px solid rgba(0,0,0,0.04); }
+    h1,h2,h3 { color: var(--text); margin-bottom:6px; }
+    .small-muted { color: rgba(11,43,87,0.7); }
+    .stButton>button { background: linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; border:none; padding:10px 14px; border-radius:10px; font-weight:600; }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 
 # ---------- AUTH ----------
 if "authenticated" not in st.session_state:
@@ -107,28 +116,8 @@ page = st.sidebar.radio("", [
     "Settings ⚙️"
 ])
 
-# ---------- LOAD DATA ----------
-notes = read_json("notes.json")
-songs = read_json("songs.json")
-timeline = read_json("timeline.json")
-
-# Try syncing from Google Sheets if available
-gs_notes = read_sheet("thoughts")
-if gs_notes:
-    notes = gs_notes
-    write_json("notes.json", notes)
-
-gs_songs = read_sheet("songs")
-if gs_songs:
-    songs = gs_songs
-    write_json("songs.json", songs)
-
-gs_timeline = read_sheet("timeline")
-if gs_timeline:
-    timeline = gs_timeline
-    write_json("timeline.json", timeline)
-
 # ---------- PAGES ----------
+
 if page == "Home 🏠":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.title("Welcome, my love 🫀")
@@ -138,19 +127,15 @@ if page == "Home 🏠":
 elif page == "Today's Thought 💭":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("💭 Today's Thought")
+    notes = read_json("notes.json")
     with st.form("note_form"):
         author = st.selectbox("Who is writing?", ["Me", "Him"])
         text = st.text_area("Write your thought...", height=140)
         lock = st.text_input("Optional entry-password (keeps it private)", type="password")
         submitted = st.form_submit_button("Save Thought 💌")
         if submitted and text.strip():
-            notes.append({
-                "author": author, "text": text.strip(),
-                "date": datetime.now().isoformat(),
-                "locked": bool(lock.strip()), "pwd": lock.strip()
-            })
+            notes.append({"author": author, "text": text.strip(), "date": datetime.now().isoformat(), "locked": bool(lock.strip()), "pwd": lock.strip()})
             write_json("notes.json", notes)
-            write_sheet("thoughts", notes, ["author","text","date","locked","pwd"])
             st.success("Saved 💙")
     st.write("---")
     for entry in reversed(notes):
@@ -173,6 +158,7 @@ elif page == "Click if you miss me 💞":
     st.header("Click only if you miss me 💞")
     st.write("A little surprise — voice note or message.")
     if st.button("Click only if you miss me 😘"):
+        st.success("I miss you so much — counting the moments until I see you again. 🫀")
         voice_path = DATA_DIR / "voice.mp3"
         if voice_path.exists():
             st.audio(str(voice_path))
@@ -183,11 +169,12 @@ elif page == "Click if you miss me 💞":
 elif page == "Our Songs 🎶":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Our Songs 🎶")
+    songs = read_json("songs.json")
     if not songs:
         st.info("No songs added yet. Add songs in Settings.")
     else:
         for s in songs:
-            st.markdown(f"**{s.get('title','Untitled')}** — {s.get('note','')}")
+            st.markdown(f"**{s.get('title','Untitled')}** — <span class='small-muted'>{s.get('note','')}</span>", unsafe_allow_html=True)
             if s.get("link"):
                 st.markdown(f"[Listen]({s.get('link')})")
             st.markdown("---")
@@ -217,12 +204,66 @@ elif page == "50+ Reasons I Love You 💌":
         st.markdown(f"**{i}. {r}**")
     st.markdown("</div>", unsafe_allow_html=True)
 
+elif page == "Photos & Polaroids 📸":
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.header("Photos & Polaroids 📸")
+    uploaded = st.file_uploader("Upload a photo (jpg/png)", type=["jpg","jpeg","png"])
+    caption = st.text_input("Caption for this photo")
+    if st.button("Save photo"):
+        if uploaded is not None:
+            fname = f"{datetime.now().strftime('%Y%m%d%H%M%S')}_{uploaded.name}"
+            target = PHOTOS_DIR / fname
+            with open(target, "wb") as f:
+                f.write(uploaded.getbuffer())
+            tl = read_json("timeline.json")
+            tl.append({"type":"photo","file": str(target), "caption": caption, "date": datetime.now().isoformat()})
+            write_json("timeline.json", tl)
+            st.success("Photo saved as Polaroid 💙")
+        else:
+            st.warning("Please choose an image first.")
+
+    files = sorted(PHOTOS_DIR.glob("*"), key=os.path.getmtime, reverse=True)
+    if files:
+        cols = st.columns(3)
+        for i, fpath in enumerate(files):
+            with cols[i % 3]:
+                try:
+                    st.image(str(fpath), use_container_width=True)
+                    tl = read_json("timeline.json")
+                    cap = next((t.get("caption","") for t in tl if t.get("file") == str(fpath)), "")
+                    if cap:
+                        st.caption(cap)
+                except Exception:
+                    pass
+    else:
+        st.info("No photos yet — upload one above.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+elif page == "Our Story Timeline 🕰️":
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.header("Our Story Timeline 🕰️")
+    tl = read_json("timeline.json")
+    with st.form("mem_form"):
+        title = st.text_input("Title")
+        date_val = st.date_input("Date")
+        desc = st.text_area("Description")
+        submit = st.form_submit_button("Add memory")
+        if submit:
+            tl.append({"type":"memory","title": title, "date": str(date_val), "desc": desc})
+            write_json("timeline.json", tl)
+            st.success("Memory saved 💙")
+    memories = [t for t in tl if t.get("type") == "memory"]
+    for m in sorted(memories, key=lambda x: x.get("date",""), reverse=True):
+        st.subheader(f"{m.get('title')} — {m.get('date')}")
+        st.write(m.get("desc"))
+        st.markdown("---")
+    st.markdown("</div>", unsafe_allow_html=True)
+
 elif page == "Settings ⚙️":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("Settings & Uploads ⚙️")
     st.write("Upload voice note, add songs, or clear saved data.")
 
-    # voice upload
     audio = st.file_uploader("Upload voice clip (mp3/wav) for 'miss me'", type=["mp3","wav"])
     if st.button("Upload voice clip"):
         if audio:
@@ -232,26 +273,26 @@ elif page == "Settings ⚙️":
         else:
             st.warning("Choose a file first.")
 
-    # add song
     st.markdown("---")
     st.subheader("Add a song")
     s_title = st.text_input("Song title")
     s_link = st.text_input("Link (optional)")
     s_note = st.text_area("Why it matters (short note)")
     if st.button("Add song"):
+        songs = read_json("songs.json")
         songs.append({"title": s_title, "link": s_link, "note": s_note})
         write_json("songs.json", songs)
-        write_sheet("songs", songs, ["title","note","link"])
         st.success("Song added 💙")
 
-    # clear data
     st.markdown("---")
-    if st.button("Clear all saved data"):
+    if st.button("Clear all saved data (photos, notes, timeline, songs)"):
         write_json("notes.json", [])
         write_json("songs.json", [])
         write_json("timeline.json", [])
         for f in PHOTOS_DIR.glob("*"):
-            try: f.unlink()
-            except: pass
-        st.success("Cleared all data 💙")
+            try:
+                f.unlink()
+            except Exception:
+                pass
+        st.success("Cleared saved data for this deployment.")
     st.markdown("</div>", unsafe_allow_html=True)
