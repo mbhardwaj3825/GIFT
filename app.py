@@ -179,7 +179,8 @@ elif page == "Our Songs 🎶":
                 st.markdown(f"[Listen]({s.get('link')})")
             st.markdown("---")
     st.markdown("</div>", unsafe_allow_html=True)
-    elif page == "Spin the Wheel 💕":
+    
+elif page == "Spin the Wheel 💕":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
     st.header("🎡 Spin the Wheel of Love 💕")
     st.write("Spin the wheel and see what romantic surprise awaits 💙")
