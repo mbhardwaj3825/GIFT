@@ -179,6 +179,66 @@ elif page == "Our Songs 🎶":
                 st.markdown(f"[Listen]({s.get('link')})")
             st.markdown("---")
     st.markdown("</div>", unsafe_allow_html=True)
+    elif page == "Spin the Wheel 💕":
+    st.markdown("<div class='card'>", unsafe_allow_html=True)
+    st.header("🎡 Spin the Wheel of Love 💕")
+    st.write("Spin the wheel and see what romantic surprise awaits 💙")
+
+    outcomes = [
+        "You get a long warm hug 💞",
+        "Movie together 🍿",
+        "You owe me ice cream 🍦",
+        "Surprise date planned by you 💫",
+        "A truth i can't lie about",
+        "You have to kiss secretly in front of everyone 😚",
+        "You upload a story of mee",
+        "You have to say 'I love you' 5 times in different ways💙",
+        "I get to pick the next movie 🎬",
+        "A dare i can't deny"
+    ]
+
+    # CSS for spinning animation
+    st.markdown("""
+        <style>
+        .wheel {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 8px solid #3b7df0;
+            margin: 40px auto;
+            background: conic-gradient(
+                #b3e5fc 0deg 36deg,
+                #d6c8f8 36deg 72deg,
+                #bfe0ff 72deg 108deg,
+                #b3e5fc 108deg 144deg,
+                #d6c8f8 144deg 180deg,
+                #bfe0ff 180deg 216deg,
+                #b3e5fc 216deg 252deg,
+                #d6c8f8 252deg 288deg,
+                #bfe0ff 288deg 324deg,
+                #b3e5fc 324deg 360deg
+            );
+            position: relative;
+            animation: none;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(3600deg); }
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    if st.button("Spin the Wheel 🎡"):
+        with st.spinner("Spinning... 💞"):
+            st.markdown('<div class="wheel" style="animation: spin 2s ease-out;"></div>', unsafe_allow_html=True)
+            time.sleep(2)
+            result = random.choice(outcomes)
+            st.success(f"💫 {result}")
+    else:
+        st.markdown('<div class="wheel"></div>', unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
 
 elif page == "50+ Reasons I Love You 💌":
     st.markdown("<div class='card'>", unsafe_allow_html=True)
@@ -198,7 +258,7 @@ elif page == "50+ Reasons I Love You 💌":
         "I love how you manage", "I love that you are foodie", "I love your courage", "I love your boundaries", "I love your control",
         "I love your thoughtfulness", "I love how you complete me", "I love the way you say 'meri laduuu'", "I love the way you teach me",
         "I love the priority you give", "I love the support you give", "I love how you make me laugh", "I love the way you love me",
-        "I love our friendship", "And most importantly, I love you 💙"
+        "I love our friendship", "I love that you have good presence of mind", "I love that you trust me", "I love that you don't get irritated by me", "I love that you give honest feedback about what you feel", "I love that i can talk about anything with you", "I love that you smile even when i act like idiot", "I love that you feel comfortable around me", "I love that you forgive my mistakes", "I love that you don't keep grudges", "I love that you make me feel special", "I love that i never get tired of talking to you", "I love that i am not you need,i am your choice", "I love that world seems a nice place around you", "You are the best thing that has happened to me", "I could write all these reasons because it was YOU", "And most importantly, I love you 💙"
     ]
     for i, r in enumerate(reasons, 1):
         st.markdown(f"**{i}. {r}**")
