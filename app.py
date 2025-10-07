@@ -117,15 +117,15 @@ def show_passcode():
     st.markdown("<h1>A little world — just for you 🫀</h1>", unsafe_allow_html=True)
     st.markdown("<p class='small-muted'>Enter the secret passcode to open our private space</p>", unsafe_allow_html=True)
     st.session_state.passcode_input = st.text_input("Passcode", type="password", key="pass")
-    if st.button("Unlock 💙"):
-        if st.session_state.passcode_input == PASSCODE:
-            st.session_state.authenticated = True
-            st.success("Unlocked — welcome 💙")
-            time.sleep(0.5)
-            st.experimental_rerun()
-        else:
-            st.error("That's not the correct passcode. Try again 💫")
-    st.markdown("</div></div>", unsafe_allow_html=True)
+   if st.button("Unlock 💙"):
+    if st.session_state.passcode_input == PASSCODE:
+        st.session_state.authenticated = True
+        st.success("Unlocked — welcome 💙")
+        time.sleep(0.5)
+        st.rerun()  # ✅ modern method — replaces experimental_rerun()
+    else:
+        st.error("That's not the correct passcode. Try again 💫")
+ st.markdown("</div></div>", unsafe_allow_html=True)
 
 if not st.session_state.authenticated:
     show_passcode()
