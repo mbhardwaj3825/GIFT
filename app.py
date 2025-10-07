@@ -93,7 +93,7 @@ def show_passcode():
             st.session_state.authenticated = True
             st.success("Unlocked — welcome 💙")
             time.sleep(0.5)
-            st.experimental_rerun()
+            st.rerun()  # ✅ Fixed line (was st.experimental_rerun)
         else:
             st.error("That's not the correct passcode. Try again 💫")
     st.markdown("</div></div>", unsafe_allow_html=True)
