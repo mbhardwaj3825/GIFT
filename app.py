@@ -7,6 +7,35 @@ from datetime import datetime
 from pathlib import Path
 import os
 
+# ====== PERMANENT DATA STORAGE ======
+default_data = {
+    "Our_songs": [
+        {"title": "Those eyes", "artist": "New West", "memory": "Always reminds me of your eyes", "listen": "https://music.youtube.com/watch?v=YPeHGoGhHxg&si=mmrpD_u4Oipfs0i9"},
+        {"title": "Teri deewani", "artist": "Kailash Kher", "memory": "Vo to me hun hi💙", "listen": "https://music.youtube.com/watch?v=3R-q79a7n98&si=6jJuk79n5aAEBV3X"},
+        {"title": "Humen tumse pyar kitna", "artist": "Kishore kumar", "memory": "'Magar jee nahi sakte' got real", "listen": "https://music.youtube.com/watch?v=aCoVNTLfcGU&si=dPRlN9bCEgMzC-MK"},
+        {"title": "Tera mera pyar amar", "artist": "Lata mangeshkar", "memory": "Yahi to kehna hai tumse bass", "listen": "https://music.youtube.com/watch?v=1DFCzfXL514&si=Ok-3g8VDoLQO95Es"}
+    ],
+
+    "photos_and_polaroids": [
+        {"url": "WhatsApp Image 2025-10-06 at 04.28.10.jpeg", "caption": "Menifesting this for life💙"},
+        {"url": "WhatsApp Image 2025-10-06 at 04.28.09.jpeg", "caption": "Look how happy i am with you😁"},
+        {"url": "WhatsApp Image 2025-10-06 at 04.43.16.jpeg", "caption": "Ghibli making us more cute🥹"},
+        {"url": "WhatsApp Image 2025-10-06 at 15.06.43.jpeg", "caption": "Our first picture"},
+        {"url": "WhatsApp Image 2025-10-06 at 15.06.42.jpeg", "caption": "The moon is beautiful,isn't?🥰"}
+    ],
+
+    "click_if_you_miss_me": [
+        {"title": "Voice Note 1", "url": "13 Sept, 6.09 pm​.mp3", "desc": "When you miss me,just remember this"},
+    ],
+
+    "Our_story_timeline": [
+        {"date": "2025-02-18", "thought": "When it all started", "Title": "My birthday party"}
+    ],
+}
+
+if "app_data" not in st.session_state:
+    st.session_state.app_data = default_data
+
 # ---------- CONFIG ----------
 st.set_page_config(page_title="For My Anjuuu 💙", layout="wide")
 PASSCODE = "Iloveyoucookie"
