@@ -13,7 +13,8 @@ default_data = {
         {"title": "Those eyes", "artist": "New West", "memory": "Always reminds me of your eyes", "listen": "https://music.youtube.com/watch?v=YPeHGoGhHxg&si=mmrpD_u4Oipfs0i9"},
         {"title": "Teri deewani", "artist": "Kailash Kher", "memory": "Vo to me hun hi💙", "listen": "https://music.youtube.com/watch?v=3R-q79a7n98&si=6jJuk79n5aAEBV3X"},
         {"title": "Humen tumse pyar kitna", "artist": "Kishore kumar", "memory": "'Magar jee nahi sakte' got real", "listen": "https://music.youtube.com/watch?v=aCoVNTLfcGU&si=dPRlN9bCEgMzC-MK"},
-        {"title": "Tera mera pyar amar", "artist": "Lata mangeshkar", "memory": "Yahi to kehna hai tumse bass", "listen": "https://music.youtube.com/watch?v=1DFCzfXL514&si=Ok-3g8VDoLQO95Es"}
+        {"title": "Tera mera pyar amar", "artist": "Lata mangeshkar", "memory": "Yahi to kehna hai tumse bass", "listen": "https://music.youtube.com/watch?v=1DFCzfXL514&si=Ok-3g8VDoLQO95Es"},
+        {"title": "Vaaroon", "artist": "anand bhaskar", "memory": "US💙", "listen": "https://music.youtube.com/watch?v=pMnCDFzDJZ0&si=Uu5-eLovpWO7qvLl"}
     ],
 
     "photos_and_polaroids": [
