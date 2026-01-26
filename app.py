@@ -224,7 +224,6 @@ elif page == "Spin the Wheel 💕":
         "You have to kiss secretly in front of everyone 😚",
         "You upload a story of mee",
         "You have to say 'I love you' 5 times in different ways💙",
-        "I get to pick the next movie 🎬",
         "A dare i can't deny"
     ]
 
