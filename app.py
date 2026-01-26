@@ -38,7 +38,6 @@ DEFAULT_TIMELINE = [
         "date": "2025-02-18",
         "desc": "When it all started 💙"
     }
-]
 
     "photos_and_polaroids": [
         {"url": "WhatsApp Image 2025-10-06 at 04.28.10.jpeg", "caption": "Menifesting this for life💙"},
